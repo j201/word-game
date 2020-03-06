@@ -14,7 +14,7 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 LDFLAGS = -lncurses
 
-CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++11
+CPPFLAGS ?= $(INC_FLAGS) -MMD -MP -std=c++11 -g
 
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LDFLAGS)
