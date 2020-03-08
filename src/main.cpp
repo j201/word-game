@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
 	srand(time(0));
 
 	printf("Loading dictionary...\n");
-	Dictionary dict("words.txt");
+	Dictionary dict("words/3of6game.txt");
 	printf("Initializing game...\n");
 	Game g(4, 4, dict);
 	printf("Number of words: %d\n", (int)g.all_words.size());
