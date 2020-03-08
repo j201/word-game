@@ -55,9 +55,10 @@ const std::vector<std::vector<char>> dice = {
 	{'p', 'a', 'c', 'e', 'm', 'd'}
 };
 
-Game::Game(int rows, int cols, Dictionary& dict) : rows(rows), cols(cols), dict(dict) {
-	this->gen_board(rows, cols);
-	this->populate_all_words();
+Game::Game(int rows, int cols, Dictionary& dict) :
+		rows(rows), cols(cols), dict(dict), min_length(3) {
+	gen_board(rows, cols);
+	populate_all_words();
 }
 
 void Game::gen_board(int rows, int cols) {
@@ -90,7 +91,7 @@ std::vector<std::string> Game::words_starting_with(Path prefix) {
 	if (sr == SearchResult::NOT_WORD)
 		return std::vector<std::string>();
 	std::vector<std::string> ss;
-	if (sr == SearchResult::WORD)
+	if (sr == SearchResult::WORD && prefix_word.size() >= min_length)
 		ss.push_back(prefix_word);
 	for (int i = -1; i <= 1; i++) {
 		for (int j = -1; j<= 1; j++) {

@@ -23,7 +23,8 @@ class Game {
 		std::vector<std::vector<char>> board;
 		/* ~Game(); */
 	private:
-		int rows, cols;
+		const int rows, cols;
+		const int min_length;
 		Dictionary& dict;
 		void gen_board(int rows, int cols);
 		void populate_all_words();
