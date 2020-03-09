@@ -15,7 +15,7 @@ Dictionary::Dictionary(std::string filepath) {
 	std::sort(words.begin(), words.end());
 }
 
-SearchResult Dictionary::search(std::string s) {
+SearchResult Dictionary::search(std::string s) const {
 	int left_limit = 0;
 	int right_limit = words.size();
 	int i = (left_limit + right_limit)/2;
@@ -55,10 +55,29 @@ const std::vector<std::vector<char>> dice = {
 	{'p', 'a', 'c', 'e', 'm', 'd'}
 };
 
-Game::Game(int rows, int cols, Dictionary& dict) :
+Game::Game(int rows, int cols, const Dictionary& dict) :
 		rows(rows), cols(cols), dict(dict), min_length(3) {
+	// Fibonacci scores, starting with length 3
+	word_scores.push_back(1);
+	word_scores.push_back(1);
+	for (int i = 5; i <= rows*cols; i++) {
+		word_scores.push_back(word_scores[i-5] + word_scores[i-4]);
+	}
+
 	gen_board(rows, cols);
 	populate_all_words();
+}
+
+const std::set<std::string>& Game::get_all_words() const {
+	return all_words;
+}
+
+const std::vector<std::vector<char>>& Game::get_board() const {
+	return board;
+}
+
+int Game::get_all_words_score() const {
+	return all_words_score;
 }
 
 void Game::gen_board(int rows, int cols) {
@@ -77,7 +96,7 @@ void Game::gen_board(int rows, int cols) {
 	}
 }
 
-std::string Game::from_path(Path path) {
+std::string Game::from_path(const Path& path) const {
 	std::string s;
 	for (Coord coord : path) {
 		s.push_back(board[coord.first][coord.second]);
@@ -85,7 +104,7 @@ std::string Game::from_path(Path path) {
 	return s;
 }
 
-std::vector<std::string> Game::words_starting_with(Path prefix) {
+std::vector<std::string> Game::words_starting_with(const Path& prefix) const {
 	std::string prefix_word = from_path(prefix);
 	SearchResult sr = dict.search(prefix_word);
 	if (sr == SearchResult::NOT_WORD)
@@ -121,4 +140,12 @@ void Game::populate_all_words() {
 			all_words.insert(words.begin(), words.end());
 		}
 	}
+	all_words_score = 0;
+	for (auto& word : all_words) {
+		all_words_score += word_score(word);
+	}
+}
+
+int Game::word_score(const std::string& word) const {
+	return word_scores[word.size()-3];
 }
