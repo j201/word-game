@@ -149,3 +149,7 @@ void Game::populate_all_words() {
 int Game::word_score(const std::string& word) const {
 	return word_scores[word.size()-3];
 }
+
+bool Game::try_play(const std::string& word) {
+	return true; // TODO
+}
