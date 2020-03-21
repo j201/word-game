@@ -2,18 +2,24 @@
 // Highly stateful and honestly not a good way to do graphics, but This Is C++
 
 #include <thread>
-#include <curses.h>
 #include "display.h"
 
 const std::chrono::milliseconds Display::tick = std::chrono::milliseconds(20);
 
-Display::Display(const std::string& dict_filepath) : dict(dict_filepath), game(4,4,dict) {
+Display::Display(const std::string& dict_filepath) : dict(dict_filepath),
+	game(board_rows,board_cols,dict) {
 	// Init ncurses
 	initscr();
 	cbreak();
 	noecho();
 	nodelay(stdscr, true);
 	keypad(stdscr, true);
+	auto board_win_w = board_cols*2+2;
+	auto board_win_h = board_win_w;
+	score_win = newwin(1, board_win_w, 0, 0);
+	board_win = newwin(board_win_h, board_win_w, 1, 0);
+	words_win = newwin(LINES, board_win_w + board_rows*board_cols, 0, board_win_w);
+	cur_word_win = newwin(1, board_win_w, 1+board_win_h, 0);
 	clear();
 }
 
