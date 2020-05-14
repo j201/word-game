@@ -15,7 +15,7 @@ Display::Display(const std::string& dict_filepath) : dict(dict_filepath),
 	nodelay(stdscr, true);
 	keypad(stdscr, true);
 	auto board_win_w = board_cols*2+2;
-	auto board_win_h = board_win_w;
+	auto board_win_h = board_rows;
 	score_win = newwin(1, board_win_w, 0, 0);
 	board_win = newwin(board_win_h, board_win_w, 1, 0);
 	words_win = newwin(LINES, board_win_w + board_rows*board_cols, 0, board_win_w);
@@ -43,7 +43,27 @@ void Display::run() {
 }
 
 void Display::draw_game() {
-	// TODO
+	clear();
+	draw_score();
+	draw_board();
+	wmove(cur_word_win, 0, 0);
+}
+
+void Display::draw_score() {
+	mvwprintw(score_win, 0, 0, "Score: %d", game.get_score());
+	wrefresh(score_win);
+}
+
+void Display::draw_board() {
+	for (int r = 0; r < game.rows; r++) {
+		wmove(board_win, r, 0);
+		for (int c = 0; c < game.cols; c++) {
+			waddch(board_win, game.get_board()[r][c]);
+			if (c+1 < game.cols)
+				waddch(board_win, ' ');
+		}
+	}
+	wrefresh(board_win);
 }
 
 void Display::tick_update() {
@@ -51,7 +71,7 @@ void Display::tick_update() {
 }
 
 bool Display::handle_input() {
-	int ch = getch();
+	int ch = wgetch(cur_word_win);
 	if (ch >= 'A' && ch <= 'Z')
 		ch = tolower(ch);
 	if (ch >= 'a' && ch <= 'z') {

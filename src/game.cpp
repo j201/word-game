@@ -11,6 +11,10 @@ Dictionary::Dictionary(std::string filepath) {
 	for (std::string line; std::getline(ifs, line);) {
 		words.push_back(line);
 	}
+	if (words.size() == 0) {
+		std::cout << "Dictionary empty! Given file path was: " << filepath << "\n";
+		exit(1);
+	}
 	ifs.close();
 	std::sort(words.begin(), words.end());
 }
@@ -152,4 +156,8 @@ int Game::word_score(const std::string& word) const {
 
 bool Game::try_play(const std::string& word) {
 	return true; // TODO
+}
+
+int Game::get_score() const {
+	return score;
 }

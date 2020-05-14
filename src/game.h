@@ -29,6 +29,7 @@ class Game {
 		const std::set<std::string>& get_all_words() const;
 		const std::vector<std::vector<char>>& get_board() const;
 		int get_all_words_score() const;
+		int get_score() const;
 
 		bool try_play(const std::string& word);
 	private:
@@ -36,6 +37,8 @@ class Game {
 		std::set<std::string> all_words;
 		std::vector<std::vector<char>> board;
 		int all_words_score;
+		std::set<std::string> played_words;
+		int score;
 
 		void gen_board(int rows, int cols);
 		void populate_all_words();

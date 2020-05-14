@@ -18,11 +18,13 @@ class Display {
 		static const int board_cols = 4;
 
 		void draw_game();
+		void draw_board();
+		void draw_score();
 		bool handle_input();
 		void tick_update();
 
-		Game game;
 		Dictionary dict;
+		Game game;
 		int word_line;
 		std::string word_in_progress;
 		WINDOW* board_win;
